@@ -1,1 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calm‑Cards for Moms (Sanitized)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fdf9f6;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+      justify-content: flex-start;
+    }
+    header {
+      background-color: #b39ddb;
+      width: 100%;
+      padding: 1rem;
+      color: white;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    main {
+      width: 100%;
+      max-width: 600px;
+      padding: 2rem;
+    }
+    label, select, input, button {
+      width: 100%;
+      display: block;
+      margin-bottom: 1rem;
+    }
+    select, input {
+      padding: 0.6rem;
+      border: 1px solid #d1c4e9;
+      border-radius: 6px;
+      background-color: #faf7ff;
+    }
+    button {
+      background-color: #80deea;
+      color: #004d40;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s ease;
+    }
+    button:hover {
+      background-color: #4dd0e1;
+    }
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    #card {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 2rem;
+      max-width: 90%;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border: 2px solid #b39ddb;
+    }
+    #card h2 {
+      margin-top: 0;
+      color: #6c5ce7;
+    }
+    #close-btn {
+      margin-top: 2rem;
+      background-color: #b39ddb;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Calm‑Cards for Moms</h1>
+  </header>
+  <main>
+    <p>Describe the problem or select a scenario to receive a single, actionable response.</p>
+    <label for="custom-problem">Describe your problem (optional):</label>
+    <input type="text" id="custom-problem" placeholder="e.g., My child refused to share a toy">
+    <label for="scenario">Or choose a scenario:</label>
+    <select id="scenario">
+      <option value="">-- Select a scenario --</option>
+      <option value="tantrum">Tantrum / Meltdown</option>
+      <option value="sibling">Sibling Conflict / Hitting</option>
+      <option value="ignore">Ignoring Instructions / Messes</option>
+      <option value="defiance">Defiance / Backtalk / Yelling</option>
+      <option value="leftout">Feeling Left Out / Unfairness</option>
+      <option value="big_emotions">Big Emotions / Slamming / Throwing</option>
+      <option value="screen">Screen Time / Technology</option>
+      <option value="lying">Lying / Sneaking</option>
+      <option value="bedtime">Bedtime / Sleep Refusal</option>
+      <option value="morning">Morning Routine / Getting Ready</option>
+      <option value="homework">Homework / Study Struggles</option>
+      <option value="transition">Transitions / Leaving Activities</option>
+      <option value="public">Public Misbehavior / In Stores</option>
+      <option value="other">Other</option>
+    </select>
+    <button id="submit-btn">Submit</button>
+  </main>
+  <div id="overlay">
+    <div id="card">
+      <h2 id="card-title"></h2>
+      <p id="card-action"></p>
+      <button id="close-btn">Close</button>
+    </div>
+  </div>
 
+  <script>
+    const submitBtn = document.getElementById('submit-btn');
+    const overlay = document.getElementById('overlay');
+    const cardTitle = document.getElementById('card-title');
+    const cardAction = document.getElementById('card-action');
+    const closeBtn = document.getElementById('close-btn');
+
+    const cards = {
+      tantrum: {
+        title: 'Tantrum / Meltdown',
+        actions: [
+          'Take a physiological sigh: two quick inhales followed by a long exhale to calm your nervous system before engaging.',
+          'Observe and describe your own body\'s reaction (jaw tightening, heart beating faster) to create a gap before responding.',
+          'Validate your child\'s feelings: "You are really upset because you wanted ..." before attempting to redirect.',
+          'Use IMPROVE: pause for one breath, change "I can\'t handle this" to "I can handle this moment," and picture yourself kneeling down calmly.',
+          'Offer a safe outlet for strong feelings, such as squeezing a pillow or stomping feet on the floor.',
+          'Give your child a simple choice ("Would you like to sit with me or in your calming corner?") to restore a sense of control.',
+          'Use ACCEPTS: shift your attention briefly by washing your hands or stepping into another room before returning.',
+          'Repeat a calm mantra like "This is hard, but we will get through it together" to regulate your tone.',
+          'After the tantrum subsides, repair if needed: "I got overwhelmed earlier; I shouldn\'t have raised my voice. Let\'s talk about what happened."',
+          'Use DEAR MAN to set a boundary: describe calmly ("You are kicking the floor"), express concern ("It could hurt you"), and assert what is needed ("Let\'s sit together and breathe").'
+        ]
+      },
+      sibling: {
+        title: 'Sibling Conflict',
+        actions: [
+          'Validate both children\'s feelings ("You\'re angry because your sibling grabbed the toy" and "You\'re upset because you were playing with it") before problem‑solving.',
+          'Use Observe‑Describe‑Participate: notice your own reaction, describe what you see ("I see two kids wanting the same toy"), and help them take turns.',
+          'Separate the children briefly to prevent harm while staying present; invite them to cool down in different spaces.',
+          'Encourage each child to tell their side one at a time while you listen without judgement.',
+          'Teach problem‑solving by offering choices ("You can share the toy or choose another for now").',
+          'Model "I feel" statements: "When you grab, it looks like you\'re frustrated. Let\'s use words instead of hands."',
+          'Use DEAR MAN to clarify your expectation: "It\'s not okay to hit. I need you to keep your hands to yourself. When you do, we all feel safe."',
+          'Acknowledge underlying emotions: "It\'s hard to wait your turn," and reinforce cooperation ("When you share quickly, we have time to play a game together").',
+          'Use ACCEPTS: if the situation escalates, direct your attention to helping another child or take a sip of water to settle yourself before mediating.',
+          'After the conflict, model repair: encourage the child who hurt to apologise and the other to express how they felt, and celebrate the reconnection.'
+        ]
+      },
+      ignore: {
+        title: 'Ignoring Instructions / Messes',
+        actions: [
+          'Use DEAR MAN: Describe the situation factually ("The toys are still on the floor"), express your feeling ("I feel overwhelmed seeing the mess"), and assert your need ("Please put them away now").',
+          'Check your body and take a slow breath before giving directions; relaxed shoulders communicate calm leadership.',
+          'Offer a choice to give a sense of control: "Do you want to clean up blocks first or cars first?", 
+          'Break tasks into small, manageable steps and narrate them calmly ("First we pick up the cars, then the dolls").',
+          'Turn the cleanup into a game with a timer or song to make it more engaging.',
+          'Praise effort and progress, reinforcing that cleanup leads to positive outcomes like reading together.',
+          'Validate their reluctance: "You were having fun and cleaning up isn\'t fun. It\'s still time to clean up."
+          'If they ignore, use ACCEPTS: redirect your focus briefly to another activity or take a sip of water, then return and restate the request calmly.',
+          'Use a visual checklist or song to make routines predictable and less overwhelming.',
+          'After completion, reflect and reinforce: "Thank you for helping clean up; when we work together, we have more time for games."
+        ]
+      },
+      defiance: {
+        title: 'Defiance / Backtalk / Yelling',
+        actions: [
+          'Connect before correct: acknowledge your child\'s feelings ("It feels unfair") before calmly stating your limit.',
+          'Use a calm tone: drop your voice and slow your speech; this communicates confidence and steadiness.',
+          'Use DEAR MAN: describe the behaviour ("You shouted at me"), express your feeling ("It hurts my ears"), assert your expectation ("Please speak respectfully"), and reinforce ("When you use kind words, I can listen better").',
+          'Validate underlying emotion: "You seem really angry because things didn\'t go your way."
+          'Offer a choice within your boundary: "You can say it calmly or write it down, but yelling isn\'t okay."',
+          'Use IMPROVE: mentally shift your words from "I can\'t handle this" to "I can handle this calmly," and picture yourself responding peacefully.',
+          'Take a physical step back and model a regulation skill, like pressing your hand to your chest and breathing; invite your child to breathe with you.',
+          'After the moment, repair if necessary: "I raised my voice when you yelled, and that wasn\'t okay. Let\'s try again."',
+          'Remind them that emotions are valid but behaviour must be respectful: "You\'re angry AND you still need to speak respectfully."',
+          'Use negotiation appropriately: "You may have five more minutes of play if you can ask me with a calm voice."'
+        ]
+      },
+      leftout: {
+        title: 'Feeling Left Out / Unfairness',
+        actions: [
+          'Empathise with their hurt: "It feels painful to be left out."
+          'Validate the emotion and separate it from behaviour: "You\'re disappointed because you weren\'t invited, but it\'s not okay to yell at your sister."',
+          'Share a time you felt excluded to normalise the feeling and show vulnerability.',
+          'Encourage them to express their feelings with words or through drawing instead of acting out.',
+          'Use DEAR MAN to assert boundaries calmly if they act out: describe, express, assert, reinforce.',
+          'Offer comfort through physical closeness (a hug or sitting beside them) while listening to their feelings.',
+          'Remind them that fairness doesn\'t always mean sameness; explain your reasoning in a calm way.',
+          'Use ACCEPTS: if your child\'s jealousy triggers your own frustration, step aside briefly to settle yourself before continuing.',
+          'Encourage brainstorming of solutions, like inviting a friend over another time or planning a special activity together.',
+          'Reflect on the moment later and repair if needed: "Earlier I brushed off your feelings; it must have hurt. Let\'s talk about it."'
+        ]
+      },
+      big_emotions: {
+        title: 'Big Emotions / Slamming / Throwing',
+        actions: [
+          'Ensure safety first: gently move objects out of the way and guide your child to a safe space if needed.',
+          'Validate their big emotion: "You are really angry right now; it looks like everything feels too much."
+          'Offer a physical alternative to hitting or throwing, such as squeezing a stress ball or stomping feet on the floor.',
+          'Use Self‑Soothe: model slow breathing and invite them to breathe with you; soften your voice.',
+          'Maintain boundaries: "It\'s okay to feel angry. It\'s not okay to slam doors. Let\'s try closing the door softly."
+          'Use DEAR MAN: describe what happened ("You threw your toy"), express your concern ("It could break"), assert your expectation ("Put it gently on the couch"), and reinforce ("When you treat things gently, we can keep playing").',
+          'Use ACCEPTS: if you\'re triggered, shift your attention momentarily by focusing on a neutral sensory detail (e.g., the feel of your feet on the ground).',
+          'Recognise triggers: if big emotions are due to hunger or fatigue, address the underlying need with a snack or rest.',
+          'Praise attempts at self‑regulation: "I saw you take a deep breath instead of throwing again; that shows strength."
+          'After the storm, repair if necessary and discuss alternative strategies with your child for next time.'
+        ]
+      },
+      screen: {
+        title: 'Screen‑Time / Technology',
+        actions: [
+          'Set clear expectations ahead of time: agree on screen limits together when everyone is calm.'
